@@ -152,12 +152,19 @@
                             </div>
 
                             <div class="ml-13 pl-4 border-l-2 border-purple-200">
-                                <p class="text-xs text-gray-500 mb-1">Wali Kelas:</p>
+                                <p class="text-xs text-gray-500 mb-1">Penulis & Penerbit:</p>
                                 <p class="text-sm font-medium text-gray-700">
                                     {{ $buku->penulis->nama_penulis }}
                                 </p>
                                 <p class="text-xs text-purple-600 font-medium">
                                     {{ $buku->penerbit->nama_penerbit }}
+                                </p>
+                            </div>
+
+                            <div class="ml-13 pl-4 border-l-2 border-purple-200 mt-2">
+                                <p class="text-sm text-gray-500 mb-1">Stok:</p>
+                                <p class="text-md font-medium text-gray-700">
+                                    {{ $buku->stok }}
                                 </p>
                             </div>
                         </div>

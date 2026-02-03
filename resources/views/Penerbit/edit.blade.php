@@ -1,26 +1,32 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Data Guru')
+@section('title', 'Edit Data penerbit')
 
 @section('content')
 <section class="max-w-3xl mx-auto bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl shadow-xl p-6 mt-10">
     <h1 class="text-3xl font-bold text-blue-600 mb-6 text-center">
-        Edit Data Guru
+        Edit Data penerbit
     </h1>
 
-    <form method="POST" action="{{ route('guru.update', $guru->id) }}" class="space-y-4">
+    <form method="POST" action="{{ route('penerbit.update', $penerbit->id) }}" class="space-y-4">
         @csrf
         @method('PUT')
 
         <div>
-            <label class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-            <input type="text" name="nama" value="{{ $guru->nama }}"
+            <label class="block text-sm font-medium text-gray-700">Nama Penerbit</label>
+            <input type="text" name="nama_penerbit" value="{{ $penerbit->nama_penerbit }}"
                 class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500">
         </div>
 
         <div>
-            <label class="block text-sm font-medium text-gray-700">Mata Pelajaran</label>
-            <input type="text" name="mapel" value="{{ $guru->mapel }}"
+            <label class="block text-sm font-medium text-gray-700">Alamat</label>
+            <input type="text" name="alamat" value="{{ $penerbit->alamat }}"
+                class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium text-gray-700">ISBN</label>
+            <input type="number" name="isbn" value="{{ $penerbit->isbn }}"
                 class="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500">
         </div>
 
@@ -30,7 +36,7 @@
                 Update Data
             </button>
 
-            <a href="{{ route('siswa.index') }}"
+            <a href="{{ route('penerbit.index') }}"
                 class="flex-1 text-center bg-gray-200 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-300 transition">
                 Batal
             </a>
