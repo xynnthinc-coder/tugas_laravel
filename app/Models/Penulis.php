@@ -15,6 +15,6 @@ class Penulis extends Model
 
     public function bukus()
     {
-        return $this->hasMany(Buku::class, 'id_penulis');
+        return $this->hasMany(Buku::class);
     }
 }

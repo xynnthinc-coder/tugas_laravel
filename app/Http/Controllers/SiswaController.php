@@ -30,6 +30,12 @@ class SiswaController extends Controller
             ->with('success', 'Data siswa berhasil ditambahkan!');
     }
 
+    public function create()
+    {
+        $gurus = Guru::all();
+        return view('siswa.create', compact('gurus'));
+    }
+
     public function edit($id)
     {
         $siswa = Siswa::findOrFail($id);

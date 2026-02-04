@@ -13,13 +13,21 @@ return new class extends Migration
     {
         Schema::create('pinjams', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('siswa_id');
-            $table->unsignedBigInteger('petugas_id');
-            $table->dateTime('tanggal_pinjam');
-            $table->timestamps();
 
-            $table->foreign('siswa_id')->references('id')->on('siswas')->onDelete('cascade');
-            $table->foreign('petugas_id')->references('id')->on('petugass')->onDelete('cascade');
+            $table->foreignId('siswa_id')
+                ->constrained('siswas')
+                ->cascadeOnDelete();
+
+            $table->foreignId('buku_id')
+                ->constrained('bukus')
+                ->cascadeOnDelete();
+
+            $table->foreignId('petugas_id')
+                ->constrained('petugass')
+                ->cascadeOnDelete();
+
+            $table->string('status')->default('dipinjam');
+            $table->timestamps();
         });
     }
 

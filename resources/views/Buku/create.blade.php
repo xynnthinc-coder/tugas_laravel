@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Buku')
-@section('page-title', 'Edit Buku')
-@section('page-sub', 'Perbarui informasi buku')
+@section('title', 'Tambah Buku')
+@section('page-title', 'Tambah Buku')
+@section('page-sub', 'Isi formulir berikut untuk menambahkan buku baru ke koleksi')
 
 @section('topbar-action')
 <a href="{{ route('buku.index') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-medium transition-colors">
@@ -16,24 +16,16 @@
 @section('content')
 <div class="max-w-3xl">
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
-        <!-- Header with Book Info -->
+        <!-- Header -->
         <div class="px-8 py-6 border-b border-gray-100">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 font-bold text-lg flex-shrink-0">
-                    {{ strtoupper(substr($buku->judul_buku, 0, 2)) }}
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold text-slate-900">{{ $buku->judul_buku }}</h3>
-                    <p class="text-sm text-slate-500">{{ $buku->kode_buku }} · Edit Data</p>
-                </div>
-            </div>
+            <h3 class="text-xl font-semibold text-slate-900 mb-1">Data Buku Baru</h3>
+            <p class="text-sm text-slate-500">Lengkapi semua field yang ditandai dengan <span class="text-red-600">*</span></p>
         </div>
 
         <!-- Form Body -->
         <div class="p-8">
-            <form method="POST" action="{{ route('buku.update', $buku->id) }}" class="space-y-6">
+            <form method="POST" action="{{ route('buku.store') }}" class="space-y-6">
                 @csrf
-                @method('PUT')
                 
                 <!-- Kode Buku -->
                 <div>
@@ -43,10 +35,12 @@
                     <input 
                         type="text" 
                         name="kode_buku" 
-                        value="{{ old('kode_buku', $buku->kode_buku) }}" 
+                        value="{{ old('kode_buku') }}" 
+                        placeholder="Contoh: MTK-001" 
                         required
                         class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     >
+                    <p class="mt-2 text-xs text-slate-500">Kode unik untuk identifikasi buku di perpustakaan.</p>
                     @error('kode_buku')
                         <div class="mt-2 flex items-center gap-2 text-sm text-red-600">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,7 +59,8 @@
                     <input 
                         type="text" 
                         name="judul_buku" 
-                        value="{{ old('judul_buku', $buku->judul_buku) }}" 
+                        value="{{ old('judul_buku') }}" 
+                        placeholder="Masukkan judul buku" 
                         required
                         class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                     >
@@ -91,7 +86,7 @@
                     >
                         <option value="">— Pilih Penulis —</option>
                         @foreach ($penuliss as $penulis)
-                            <option value="{{ $penulis->id }}" {{ old('penulis_id', $buku->penulis_id) == $penulis->id ? 'selected' : '' }}>
+                            <option value="{{ $penulis->id }}" {{ old('penulis_id') == $penulis->id ? 'selected' : '' }}>
                                 {{ $penulis->nama_penulis }}
                             </option>
                         @endforeach
@@ -118,7 +113,7 @@
                     >
                         <option value="">— Pilih Penerbit —</option>
                         @foreach ($penerbits as $penerbit)
-                            <option value="{{ $penerbit->id }}" {{ old('penerbit_id', $buku->penerbit_id) == $penerbit->id ? 'selected' : '' }}>
+                            <option value="{{ $penerbit->id }}" {{ old('penerbit_id') == $penerbit->id ? 'selected' : '' }}>
                                 {{ $penerbit->nama_penerbit }}
                             </option>
                         @endforeach
@@ -141,7 +136,8 @@
                     <input 
                         type="number" 
                         name="stok" 
-                        value="{{ old('stok', $buku->stok) }}" 
+                        value="{{ old('stok') }}" 
+                        placeholder="Jumlah stok buku" 
                         min="0" 
                         required
                         class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
@@ -165,7 +161,7 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                         </svg>
-                        Simpan Perubahan
+                        Simpan Buku
                     </button>
                     <a 
                         href="{{ route('buku.index') }}" 

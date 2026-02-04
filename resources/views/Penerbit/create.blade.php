@@ -1,7 +1,7 @@
 @extends('layouts.app')
-@section('title', 'Edit Penerbit')
-@section('page-title', 'Edit Penerbit')
-@section('page-sub', 'Perbarui informasi penerbit')
+@section('title', 'Tambah Penerbit')
+@section('page-title', 'Tambah Penerbit')
+@section('page-sub', 'Isi formulir berikut untuk menambahkan penerbit baru')
 @section('topbar-action')
 <a href="{{ route('penerbit.index') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-medium transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -11,40 +11,32 @@
 <div class="max-w-3xl">
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
         <div class="px-8 py-6 border-b border-gray-100">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center text-sky-600 font-bold text-lg">{{ strtoupper(substr($penerbit->nama_penerbit, 0, 2)) }}</div>
-                <div>
-                    <h3 class="text-xl font-semibold text-slate-900">{{ $penerbit->nama_penerbit }}</h3>
-                    <p class="text-sm text-slate-500">{{ $penerbit->alamat }} · Edit Data</p>
-                </div>
-            </div>
+            <h3 class="text-xl font-semibold text-slate-900 mb-1">Data Penerbit Baru</h3>
+            <p class="text-sm text-slate-500">Lengkapi semua field yang ditandai dengan <span class="text-red-600">*</span></p>
         </div>
         <div class="p-8">
-            <form method="POST" action="{{ route('penerbit.update', $penerbit->id) }}" class="space-y-6">@csrf @method('PUT')
+            <form method="POST" action="{{ route('penerbit.store') }}" class="space-y-6">@csrf
                 <div><label class="block text-sm font-medium text-slate-700 mb-2">Nama Penerbit <span class="text-red-600">*</span></label>
-                    <input type="text" name="nama_penerbit" value="{{ old('nama_penerbit', $penerbit->nama_penerbit) }}" required class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    <input type="text" name="nama_penerbit" value="{{ old('nama_penerbit') }}" placeholder="Masukkan nama penerbit" required class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                     @error('nama_penerbit')<div class="mt-2 flex items-center gap-2 text-sm text-red-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9.303 3.376a12 12 0 11-15.94-15.94 12 12 0 0115.94 15.94z" />
                         </svg>{{ $message }}</div>@enderror
                 </div>
                 <div><label class="block text-sm font-medium text-slate-700 mb-2">Alamat <span class="text-red-600">*</span></label>
-                    <input type="text" name="alamat" value="{{ old('alamat', $penerbit->alamat) }}" required class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    <input type="text" name="alamat" value="{{ old('alamat') }}" placeholder="Contoh: Jl. Merdeka No. 123" required class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                     @error('alamat')<div class="mt-2 flex items-center gap-2 text-sm text-red-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9.303 3.376a12 12 0 11-15.94-15.94 12 12 0 0115.94 15.94z" />
                         </svg>{{ $message }}</div>@enderror
                 </div>
                 <div><label class="block text-sm font-medium text-slate-700 mb-2">ISBN <span class="text-red-600">*</span></label>
-                    <input type="number" name="isbn" value="{{ old('isbn', $penerbit->isbn) }}" required class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    <input type="number" name="isbn" value="{{ old('isbn') }}" placeholder="Masukkan ISBN" required class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                     @error('isbn')<div class="mt-2 flex items-center gap-2 text-sm text-red-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9.303 3.376a12 12 0 11-15.94-15.94 12 12 0 0115.94 15.94z" />
                         </svg>{{ $message }}</div>@enderror
                 </div>
-                <div class="flex gap-3 pt-6 border-t border-gray-100">
-                    <button type="submit" class="inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex gap-3 pt-6 border-t border-gray-100"><button type="submit" class="inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>Simpan Perubahan</button>
-                    <a href="{{ route('penerbit.index') }}" class="inline-flex items-center px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-medium transition-colors">Batalkan</a>
-                </div>
+                        </svg>Simpan Penerbit</button><a href="{{ route('penerbit.index') }}" class="inline-flex items-center px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-medium transition-colors">Batalkan</a></div>
             </form>
         </div>
     </div>

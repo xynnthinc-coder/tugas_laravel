@@ -3,22 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PinjamDetail extends Model
 {
-    protected $table = 'pinjam_details';
-    
-    protected $fillable = [
-        'pinjam_id',
-        'buku_id',
-    ];
+    protected $fillable = ['pinjam_id', 'buku_id'];
 
-    public function pinjam()
+    public function pinjam(): BelongsTo
     {
         return $this->belongsTo(Pinjam::class);
     }
 
-    public function buku()
+    public function buku(): BelongsTo
     {
         return $this->belongsTo(Buku::class);
     }

@@ -26,6 +26,11 @@ class GuruController extends Controller
             ->with('success', 'Data guru berhasil ditambahkan!');
     }
 
+    public function create()
+    {
+        return view('guru.create');
+    }
+
     public function edit($id)
     {
         $guru = Guru::findOrFail($id);

@@ -12,9 +12,9 @@ class Petugas extends Model
     protected $table = 'petugass';
 
     protected $fillable = [
-        'NIP',
-        'Nama_Petugas',
-        'No_Telp',
+        'nip',
+        'nama_petugas',
+        'no_telp',
     ];
 
     public function pinjams()

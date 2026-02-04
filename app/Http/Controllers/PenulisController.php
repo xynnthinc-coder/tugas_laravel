@@ -29,6 +29,11 @@ class PenulisController extends Controller
             ->with('success', 'Data penulis berhasil ditambahkan!');
     }
 
+    public function create()
+    {
+        return view('penulis.create');
+    }
+
     public function edit($id)
     {
         $penulis = Penulis::findOrFail($id);

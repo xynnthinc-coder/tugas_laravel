@@ -35,6 +35,13 @@ class BukuController extends Controller
             ->with('success', 'Data buku berhasil ditambahkan!');
     }
 
+    public function create()
+    {
+        $penuliss = Penulis::all();
+        $penerbits = Penerbit::all();
+        return view('buku.create', compact('penuliss', 'penerbits'));
+    }
+
     public function edit($id)
     {
         $buku = Buku::findOrFail($id);

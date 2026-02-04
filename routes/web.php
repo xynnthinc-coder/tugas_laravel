@@ -9,10 +9,24 @@ use App\Http\Controllers\PenulisController;
 use App\Http\Controllers\PinjamDetailController;
 use App\Http\Controllers\PinjamController;
 use App\Http\Controllers\PetugasController;
+use App\Models\Siswa;
+use App\Models\Guru;
+use App\Models\Buku;
+use App\Models\Penulis;
+use App\Models\Penerbit;
+use App\Models\Petugas;
 
+// Dashboard route - menampilkan welcome page dengan statistik
 Route::get('/', function () {
-    return redirect()->route('siswa.index');
-});
+    return view('welcome', [
+        'siswas' => Siswa::all(),
+        'gurus' => Guru::all(),
+        'bukus' => Buku::all(),
+        'penuliss' => Penulis::all(),
+        'penerbits' => Penerbit::all(),
+        'petugass' => Petugas::all(),
+    ]);
+})->name('dashboard');
 
 // Resource route untuk Siswa
 Route::resource('siswa', SiswaController::class);
@@ -26,14 +40,16 @@ Route::resource('buku', BukuController::class);
 // Resource route untuk Penulis
 Route::resource('penulis', PenulisController::class);
 
-//Resource route untuk Penerbit
+// Resource route untuk Penerbit
 Route::resource('penerbit', PenerbitController::class);
 
-//Resource route untuk Petugas
+// Resource route untuk Petugas
 Route::resource('petugas', PetugasController::class);
 
-//Resource route untuk Pinjam
+// Resource route untuk Pinjam
 Route::resource('pinjam', PinjamController::class);
 
-//Resource route untuk Pinjam Detail
+Route::patch('pinjam/{pinjam}/kembalikan', [PinjamController::class, 'kembalikan'])->name('pinjam.kembalikan');
+
+// Resource route untuk Pinjam Detail
 Route::resource('pinjamdetail', PinjamDetailController::class);

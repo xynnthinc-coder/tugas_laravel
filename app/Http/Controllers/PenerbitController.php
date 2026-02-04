@@ -28,6 +28,10 @@ class PenerbitController extends Controller
             ->with('success', 'Data penerbit berhasil ditambahkan!');
     }
 
+    public function create() {
+        return view('penerbit.create');
+    }
+
     public function edit($id) {
         $penerbit = Penerbit::findOrFail($id);
         $bukus = Buku::all();
