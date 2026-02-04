@@ -40,6 +40,7 @@
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-12">#</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Siswa</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Buku</th>
+                    <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Jumlah</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Petugas</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Pinjam</th>
                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Kembali</th>
@@ -54,12 +55,23 @@
                         ? 'bg-amber-100 text-amber-700'
                         : 'bg-emerald-100 text-emerald-700';
                     $statusLabel = ucfirst($pinjam->status);
+                    $bukuCount = $pinjam->pinjamDetails->count();
+                    $bukuRow = $pinjam->buku ?? $pinjam->pinjamDetails->first()?->buku;
+                    $judulBuku = $bukuRow?->judul_buku ?? '-';
+                    if ($bukuCount > 1 && $judulBuku !== '-') {
+                        $judulBuku .= ' (+' . ($bukuCount - 1) . ' lainnya)';
+                    }
                 @endphp
                 <tr class="searchable-row hover:bg-gray-50 transition-colors">
                     <td class="px-6 py-4 text-sm text-gray-500">{{ $index + 1 }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ $pinjam->siswa->nama }}</td>
-                    <td class="px-6 py-4 text-sm text-slate-900">{{ $pinjam->buku->judul_buku }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ $pinjam->petugas->nama_petugas }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-700">{{ $pinjam->siswa?->nama ?? '-' }}</td>
+                    <td class="px-6 py-4 text-sm text-slate-900">{{ $judulBuku }}</td>
+                    <td class="px-6 py-4 text-right">
+                        <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-indigo-500/15 text-indigo-700">
+                            {{ $bukuCount }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-700">{{ $pinjam->petugas?->nama_petugas ?? '-' }}</td>
                     <td class="px-6 py-4 text-sm text-gray-700">{{ \Carbon\Carbon::parse($pinjam->tanggal_pinjam)->format('d M Y') }}</td>
                     <td class="px-6 py-4 text-sm text-gray-700">
                         {{ $pinjam->tanggal_kembali ? \Carbon\Carbon::parse($pinjam->tanggal_kembali)->format('d M Y') : '-' }}
@@ -82,24 +94,18 @@
                                 </svg>
                             </a>
                             @if ($pinjam->status === 'dipinjam')
-                            <form method="POST" action="{{ route('pinjam.kembalikan', $pinjam->id) }}">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Kembalikan">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                    </svg>
-                                </button>
-                            </form>
+                            <a href="{{ route('pinjam.pengembalian', $pinjam->id) }}" class="px-3 py-2 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition-colors">
+                                Pengembalian
+                            </a>
                             @else
-                            <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">
-                                Selesai
-                            </span>
+                            <a href="{{ route('pinjam.show', $pinjam->id) }}" class="px-3 py-2 text-xs font-semibold rounded-lg bg-emerald-500/15 text-emerald-700">
+                                Sudah Kembali
+                            </a>
                             @endif
                             <form method="POST" action="{{ route('pinjam.destroy', $pinjam->id) }}" id="delPinjam{{ $pinjam->id }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="button" onclick="openConfirm(document.getElementById('delPinjam{{ $pinjam->id }}'), '{{ $pinjam->siswa->nama }} - {{ $pinjam->buku->judul_buku }}')" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Hapus">
+                                <button type="button" onclick="openConfirm(document.getElementById('delPinjam{{ $pinjam->id }}'), '{{ $pinjam->siswa?->nama ?? '-' }} - {{ $judulBuku }}')" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Hapus">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                     </svg>
@@ -110,7 +116,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="8" class="px-6 py-16">
+                    <td colspan="9" class="px-6 py-16">
                         <div class="text-center">
                             <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                                 <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

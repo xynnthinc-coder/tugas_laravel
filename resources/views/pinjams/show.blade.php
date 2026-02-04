@@ -49,18 +49,13 @@
                             Edit
                         </a>
                         
-                        <form method="POST" action="{{ route('pinjam.kembalikan', $pinjam->id) }}" class="inline">
-                            @csrf
-                            @method('PATCH')
-                            <button type="submit" 
-                                    onclick="return confirm('Tandai buku sebagai sudah dikembalikan?')"
-                                    class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                Kembalikan
-                            </button>
-                        </form>
+                        <a href="{{ route('pinjam.pengembalian', $pinjam->id) }}"
+                           class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4 4m0 0l-4 4m4-4H3"/>
+                            </svg>
+                            Pengembalian
+                        </a>
                     @endif
                 </div>
             </div>
@@ -171,13 +166,13 @@
                             {{ $index + 1 }}
                         </td>
                         <td class="px-6 py-4">
-                            <div class="text-sm font-medium text-gray-900">{{ $detail->buku->judul_buku }}</div>
+                            <div class="text-sm font-medium text-gray-900">{{ $detail->buku?->judul_buku ?? '-' }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $detail->buku->penulis->nama_penulis ?? '-' }}
+                            {{ $detail->buku?->penulis?->nama_penulis ?? '-' }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $detail->buku->penerbit->nama_penerbit ?? '-' }}
+                            {{ $detail->buku?->penerbit?->nama_penerbit ?? '-' }}
                         </td>
                     </tr>
                     @empty

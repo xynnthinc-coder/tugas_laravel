@@ -10,6 +10,7 @@ class Pinjam extends Model
 {
     protected $fillable = [
         'siswa_id',
+        'buku_id',
         'petugas_id',
         'tanggal_pinjam',
         'tanggal_kembali',
@@ -29,6 +30,11 @@ class Pinjam extends Model
     public function petugas(): BelongsTo
     {
         return $this->belongsTo(Petugas::class);
+    }
+
+    public function buku(): BelongsTo
+    {
+        return $this->belongsTo(Buku::class);
     }
 
     public function pinjamDetails(): HasMany

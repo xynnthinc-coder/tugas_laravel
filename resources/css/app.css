@@ -6,6 +6,74 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+@layer components {
+    .glass-surface {
+        @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-lg shadow-black/20;
+    }
+
+    .glass-card {
+        /* Tailwind doesn't allow @apply of custom component classes (e.g. glass-surface). */
+        @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-lg shadow-black/20 rounded-2xl;
+    }
+}
+
+@layer base {
+    /* Make default pages look modern in dark mode without rewriting every view. */
+    .dark {
+        color-scheme: dark;
+    }
+
+    .dark .bg-white {
+        background-color: rgb(15 23 42 / 0.55) !important;
+        backdrop-filter: blur(18px);
+    }
+
+    .dark .bg-gray-50 {
+        background-color: rgb(255 255 255 / 0.04) !important;
+    }
+
+    .dark .bg-gray-100 {
+        background-color: rgb(255 255 255 / 0.06) !important;
+    }
+
+    .dark .border-gray-100,
+    .dark .border-gray-200,
+    .dark .border-gray-300 {
+        border-color: rgb(255 255 255 / 0.10) !important;
+    }
+
+    .dark .text-slate-900 {
+        color: rgb(226 232 240) !important;
+    }
+
+    .dark .text-gray-900 {
+        color: rgb(226 232 240) !important;
+    }
+
+    .dark .text-gray-700 {
+        color: rgb(203 213 225) !important;
+    }
+
+    .dark .text-gray-600,
+    .dark .text-gray-500,
+    .dark .text-gray-400 {
+        color: rgb(148 163 184) !important;
+    }
+
+    .dark input,
+    .dark select,
+    .dark textarea {
+        background-color: rgb(15 23 42 / 0.55);
+        border-color: rgb(255 255 255 / 0.12);
+        color: rgb(226 232 240);
+    }
+
+    .dark input::placeholder,
+    .dark textarea::placeholder {
+        color: rgb(148 163 184);
+    }
 }

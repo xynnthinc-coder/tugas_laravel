@@ -13,7 +13,7 @@ class PinjamController extends Controller
 {
     public function index()
     {
-        $pinjams = Pinjam::with(['siswa', 'petugas', 'pinjamDetails.buku'])
+        $pinjams = Pinjam::with(['buku', 'siswa', 'petugas', 'pinjamDetails.buku'])
             ->latest()
             ->get();
 
@@ -44,13 +44,16 @@ class PinjamController extends Controller
         ]);
 
         DB::transaction(function () use ($validated) {
-            // Buat record peminjaman tanpa buku_id
+            $firstBukuId = (int) $validated['buku_ids'][0];
+
+            // Buat record peminjaman (buku_id diisi untuk kompatibilitas schema lama)
             $pinjam = Pinjam::create([
                 'siswa_id' => $validated['siswa_id'],
                 'petugas_id' => $validated['petugas_id'],
                 'tanggal_pinjam' => $validated['tanggal_pinjam'],
                 'tanggal_kembali' => $validated['tanggal_kembali'],
                 'status' => 'dipinjam',
+                'buku_id' => $firstBukuId,
             ]);
 
             // Tambahkan detail buku dan kurangi stok
@@ -80,6 +83,18 @@ class PinjamController extends Controller
         ])->findOrFail($id);
 
         return view('pinjams.show', compact('pinjam'));
+    }
+
+    public function pengembalian($id)
+    {
+        $pinjam = Pinjam::with([
+            'siswa',
+            'petugas',
+            'pinjamDetails.buku.penulis',
+            'pinjamDetails.buku.penerbit',
+        ])->findOrFail($id);
+
+        return view('pinjams.pengembalian', compact('pinjam'));
     }
 
     public function edit($id)
@@ -117,6 +132,8 @@ class PinjamController extends Controller
         ]);
 
         DB::transaction(function () use ($pinjam, $validated) {
+            $firstBukuId = (int) $validated['buku_ids'][0];
+
             // Kembalikan stok buku lama
             foreach ($pinjam->pinjamDetails as $detail) {
                 $detail->buku->increment('stok');
@@ -131,6 +148,7 @@ class PinjamController extends Controller
                 'petugas_id' => $validated['petugas_id'],
                 'tanggal_pinjam' => $validated['tanggal_pinjam'],
                 'tanggal_kembali' => $validated['tanggal_kembali'],
+                'buku_id' => $firstBukuId,
             ]);
 
             // Tambahkan detail baru dan kurangi stok

@@ -24,6 +24,12 @@
             <form method="POST" action="{{ route('pinjam.update', $pinjam->id) }}" class="space-y-6">
                 @csrf
                 @method('PUT')
+                @php
+                    $selectedBukuIds = old('buku_ids');
+                    if (!is_array($selectedBukuIds)) {
+                        $selectedBukuIds = $pinjam->pinjamDetails->pluck('buku_id')->all();
+                    }
+                @endphp
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-2">Siswa <span class="text-red-600">*</span></label>
@@ -47,15 +53,27 @@
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-2">Buku <span class="text-red-600">*</span></label>
-                    <select name="buku_id" required class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-                        <option value="">Pilih buku</option>
+                    <select name="buku_ids[]" multiple required class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         @foreach ($bukus as $buku)
-                        <option value="{{ $buku->id }}" {{ old('buku_id', $pinjam->buku_id) == $buku->id ? 'selected' : '' }}>
-                            {{ $buku->judul_buku }}
+                        @php
+                            $isSelected = in_array($buku->id, $selectedBukuIds);
+                            $isDisabled = !$isSelected && ($buku->stok < 1);
+                        @endphp
+                        <option value="{{ $buku->id }}" {{ $isSelected ? 'selected' : '' }} {{ $isDisabled ? 'disabled' : '' }}>
+                            {{ $buku->judul_buku }} (stok: {{ $buku->stok }}){{ $isDisabled ? ' - stok habis' : '' }}
                         </option>
                         @endforeach
                     </select>
-                    @error('buku_id')
+                    <p class="mt-2 text-xs text-slate-500">Tips: tahan Ctrl (Windows) / Cmd (Mac) untuk pilih lebih dari satu.</p>
+                    @error('buku_ids')
+                    <div class="mt-2 flex items-center gap-2 text-sm text-red-600">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9.303 3.376a12 12 0 11-15.94-15.94 12 12 0 0115.94 15.94z" />
+                        </svg>
+                        {{ $message }}
+                    </div>
+                    @enderror
+                    @error('buku_ids.*')
                     <div class="mt-2 flex items-center gap-2 text-sm text-red-600">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9.303 3.376a12 12 0 11-15.94-15.94 12 12 0 0115.94 15.94z" />
@@ -112,21 +130,7 @@
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Status <span class="text-red-600">*</span></label>
-                    <select name="status" required class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-                        <option value="dipinjam" {{ old('status', $pinjam->status) === 'dipinjam' ? 'selected' : '' }}>Dipinjam</option>
-                        <option value="dikembalikan" {{ old('status', $pinjam->status) === 'dikembalikan' ? 'selected' : '' }}>Dikembalikan</option>
-                    </select>
-                    @error('status')
-                    <div class="mt-2 flex items-center gap-2 text-sm text-red-600">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9.303 3.376a12 12 0 11-15.94-15.94 12 12 0 0115.94 15.94z" />
-                        </svg>
-                        {{ $message }}
-                    </div>
-                    @enderror
-                </div>
+                <!-- Status otomatis (dipinjam). Pengembalian dilakukan via tombol "Kembalikan". -->
 
                 <div class="flex gap-3 pt-6 border-t border-gray-100">
                     <button type="submit" class="inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-colors">

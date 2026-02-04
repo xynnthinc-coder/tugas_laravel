@@ -49,6 +49,7 @@ Route::resource('petugas', PetugasController::class);
 // Resource route untuk Pinjam
 Route::resource('pinjam', PinjamController::class);
 
+Route::get('pinjam/{pinjam}/pengembalian', [PinjamController::class, 'pengembalian'])->name('pinjam.pengembalian');
 Route::patch('pinjam/{pinjam}/kembalikan', [PinjamController::class, 'kembalikan'])->name('pinjam.kembalikan');
 
 // Resource route untuk Pinjam Detail

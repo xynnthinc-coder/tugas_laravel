@@ -13,7 +13,7 @@
     
     <div class="relative z-10 flex items-center justify-between">
         <div class="flex-1">
-            <h2 class="text-3xl font-semibold mb-2 font-['DM_Serif_Display']">Selamat Pagi, Administrator 👋</h2>
+            <h2 class="text-3xl font-semibold mb-2">Selamat Pagi, Administrator 👋</h2>
             <p class="text-indigo-100 text-base">Kelola seluruh data perpustakaan sekolah dari satu tempat yang terintegrasi dan mudah digunakan.</p>
         </div>
         <div class="hidden lg:block">
